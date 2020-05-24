@@ -5,10 +5,25 @@ sys.path.append('/var/app/current')
 
 from flask import Flask, make_response, jsonify
 from endpoints import app_endpoints
-
+from flask_cognito import CognitoAuth
 
 app = Flask(__name__)
+
+app.config.update({
+    'COGNITO_REGION': 'us-east-1',
+    'COGNITO_USERPOOL_ID': 'us-east-1_DhHITtoV4',
+
+    # optional
+    'COGNITO_APP_CLIENT_ID': 'fd0rhtsuk2naddhrl32f77hl7',  # client ID you wish to verify user is authenticated against
+    'COGNITO_CHECK_TOKEN_EXPIRATION': True,  # disable token expiration checking for testing purposes
+    'COGNITO_JWT_HEADER_NAME': 'X-MyApp-Authorization',
+    'COGNITO_JWT_HEADER_PREFIX': 'Bearer'
+})
+
+
 app.register_blueprint(app_endpoints)
+
+cogauth = CognitoAuth(app)
 
 
 @app.errorhandler(404)

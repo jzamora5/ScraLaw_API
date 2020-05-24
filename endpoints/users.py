@@ -1,16 +1,20 @@
 """ User Endpoints """
+
 from datetime import datetime
-from endpoints import app_endpoints
-from flask import abort, make_response, request
 import Dynamo
 from Dynamo import jsonify
 from Dynamo.CRUD import put_item, get_item, update_item, delete_item
+from endpoints import app_endpoints, decorate_if_not
+from flask import abort, make_response, request
+from flask_cognito import cognito_auth_required
+from os import getenv
 
 
 allowed_keys = ['first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'tel']
 
 
 @app_endpoints.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
+@decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def get_user(user_id):
     """ Returns all the info from a user in DynamoDB"""
 
@@ -23,6 +27,7 @@ def get_user(user_id):
 
 
 @app_endpoints.route('/users/<user_id>', methods=['POST'], strict_slashes=False)
+@decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def create_user(user_id):
     """ Creates a new User in DynamoDB Table"""
     date_now = datetime.now()
@@ -49,6 +54,7 @@ def create_user(user_id):
 
 
 @app_endpoints.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+@decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def update_user(user_id):
     """ Updates a user's information """
 
@@ -79,6 +85,7 @@ def update_user(user_id):
 
 
 @app_endpoints.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
+@decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def delete_user(user_id):
     """ Deletes a user from DynamoDB """
     key = {'user_id': user_id}
