@@ -76,7 +76,13 @@ def update_user(user_id):
 
     up_expression = ", ".join(up_expression)
 
-    response = update_item(Dynamo.table, key, up_expression, attr_values)
+    response = ""
+
+    if attr_values:
+        up_expression += ', updated_at=:updated_at'
+        date_iso = datetime.now().isoformat()
+        attr_values[':updated_at'] = date_iso
+        response = update_item(Dynamo.table, key, up_expression, attr_values)
 
     if not response:
         abort(400, description="Failed Updating User")
