@@ -13,6 +13,15 @@ from os import getenv
 allowed_keys = ['first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'tel']
 
 
+@app_endpoints.route('/users/', methods=['GET'], strict_slashes=False)
+@decorate_if_not(getenv('LOCAL'), cognito_auth_required)
+def get_users():
+    """ Returns all the users from DynamoDB table"""
+    response = Dynamo.table.scan()
+    items = response['Items']
+    return jsonify(items)
+
+
 @app_endpoints.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def get_user(user_id):
@@ -43,7 +52,7 @@ def create_user(user_id):
         'tel': "",
         'created_at': date_iso,
         'updated_at': date_iso,
-        'processes': []
+        'processes': {}
     }
     response = put_item(Dynamo.table, item)
 
@@ -74,7 +83,7 @@ def update_user(user_id):
         up_expression.append(' {}={}'.format(d_key, ':' + d_key))
         attr_values[':' + d_key] = d_value
 
-    up_expression = ", ".join(up_expression)
+    up_expression = "SET" + ", ".join(up_expression)
 
     response = ""
 

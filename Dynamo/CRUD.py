@@ -17,12 +17,20 @@ def put_item(table, item):
         return response
 
 
-def get_item(table, key):
+def get_item(table, key, projection_expression=[], attr_names=[]):
     """ Gets an item from a dynamoDB table """
+
+    parameters = {"Key": key}
+
+    if projection_expression:
+        parameters["ProjectionExpression"] = projection_expression
+
+    if attr_names:
+        parameters["ExpressionAttributeNames"] = attr_names
+
     try:
-        response = table.get_item(
-            Key=key
-        )
+        response = table.get_item(**parameters)
+
     except ClientError as e:
         print(e.response['Error']['Message'])
         return False
@@ -31,17 +39,25 @@ def get_item(table, key):
         return item
 
 
-def update_item(table, key, up_expression, attr_values):
+def update_item(table, key, up_expression, attr_values, attr_names={}):
     """ Updates an item from a dynamoDB table"""
     # UpdateExpression= "set info.rating = :r, info.plot=:p, info.actors=:a"
+
     try:
-        response = table.update_item(
-            Key=key,
-            UpdateExpression="SET" + up_expression,
-            ExpressionAttributeValues=attr_values,
-            ReturnValues="UPDATED_NEW",
-            ConditionExpression='attribute_exists(user_id)'
-        )
+        parameters = {
+            "Key": key,
+            "UpdateExpression": up_expression,
+            "ReturnValues": "UPDATED_NEW",
+            "ConditionExpression": 'attribute_exists(user_id)'
+        }
+
+        if attr_names:
+            parameters["ExpressionAttributeNames"] = attr_names
+        if attr_values:
+            parameters["ExpressionAttributeValues"] = attr_values
+
+        response = table.update_item(**parameters)
+
     except ClientError as e:
         print(e.response['Error']['Message'])
         return False
