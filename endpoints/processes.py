@@ -8,7 +8,7 @@ from endpoints import app_endpoints, decorate_if_not
 from flask import abort, make_response, request
 from flask_cognito import cognito_auth_required
 from os import getenv
-from Scraper.LawScraper import scrap_law
+from Scraper.LawScraperBeautifulSoup import scrap_law
 
 
 @app_endpoints.route('/processes/<process_id>/<user_id>', methods=['GET'], strict_slashes=False)

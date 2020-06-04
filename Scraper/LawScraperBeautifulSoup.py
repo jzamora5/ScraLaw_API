@@ -45,17 +45,8 @@ def scrap_law(process_id):
         formulario = s.find('form', attrs={'class':'consulta'}).find_all('input')
         id_proc = s.find('a', attrs={'onclick':'PostIdProceso(event)'}).get('id')
 
-        if formulario:
-            form = {
-                formulario[0].get('name'): formulario[0].get('value'),
-                formulario[1].get('name'): id_proc,
-                formulario[2].get('name'): formulario[2].get('value'),
-                formulario[3].get('name'): formulario[3].get('value'),
-                formulario[4].get('name'): formulario[4].get('value'),
-                formulario[5].get('name'): formulario[5].get('value'),
-                formulario[6].get('name'): formulario[6].get('value'),
-                formulario[7].get('name'): formulario[7].get('value')
-            }
+        form['IdProceso'] = id_proc
+
         newurl = r.request.url
     except Exception as e:
         print("Error en el segundo request: ", e)

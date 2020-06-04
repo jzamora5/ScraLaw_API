@@ -5,9 +5,8 @@ import Dynamo
 from Dynamo import jsonify
 from flask_cognito import cognito_auth_required
 from os import getenv
-from Scraper.LawScraper import scrap_law
+from Scraper.LawScraperBeautifulSoup import scrap_law
 from flask import abort
-
 
 @app_endpoints.route('/status', methods=['GET'], strict_slashes=False)
 def status():
