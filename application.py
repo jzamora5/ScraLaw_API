@@ -12,10 +12,10 @@ app = Flask(__name__)
 
 app.config.update({
     'COGNITO_REGION': 'us-east-1',
-    'COGNITO_USERPOOL_ID': 'us-east-1_vtIWcDXTK',
+    'COGNITO_USERPOOL_ID': 'us-east-1_sgeT5tm5u',
 
     # optional
-    'COGNITO_APP_CLIENT_ID': '6phcgqpd6ueito5ohrsv5qf9v7',  # client ID you wish to verify user is authenticated against
+    'COGNITO_APP_CLIENT_ID': '3rj5a30prom7dudokc1b5dog4l',  # client ID you wish to verify user is authenticated against
     'COGNITO_CHECK_TOKEN_EXPIRATION': True,  # disable token expiration checking for testing purposes
     'COGNITO_JWT_HEADER_NAME': 'X-MyApp-Authorization',
     'COGNITO_JWT_HEADER_PREFIX': 'Bearer'

@@ -17,7 +17,7 @@ else:
 
 table_name = 'UserProcesses'
 table = ddb_resource.Table(table_name)
-create_table(ddb_resource, ddb_client, table_name, 'user_id', 'S')
+create_table(ddb_resource, ddb_client, table_name, 'user_id', 'S', 'tier_gsi', 'tier')
 
 
 def jsonify(obj):

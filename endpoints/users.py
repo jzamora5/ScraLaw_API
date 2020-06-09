@@ -10,7 +10,7 @@ from flask_cognito import cognito_auth_required
 from os import getenv
 
 
-allowed_keys = ['first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'tel']
+allowed_keys = ['tier', 'first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'cel']
 
 
 @app_endpoints.route('/users/', methods=['GET'], strict_slashes=False)
@@ -44,12 +44,13 @@ def create_user(user_id):
 
     item = {
         'user_id': user_id,
+        'tier': '1',
         'first_name': "",
         'last_name': "",
         'person_id_type': "",
         'person_id': "",
         'e_mail': "",
-        'tel': "",
+        'cel': "",
         'created_at': date_iso,
         'updated_at': date_iso,
         'processes': {}
@@ -81,7 +82,7 @@ def update_user(user_id):
         if d_key not in allowed_keys:
             continue
         up_expression.append(' {}={}'.format(d_key, ':' + d_key))
-        attr_values[':' + d_key] = d_value
+        attr_values[':' + d_key] = d_valueZ
 
     up_expression = "SET" + ", ".join(up_expression)
 
