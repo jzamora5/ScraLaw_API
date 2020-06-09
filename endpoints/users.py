@@ -82,7 +82,7 @@ def update_user(user_id):
         if d_key not in allowed_keys:
             continue
         up_expression.append(' {}={}'.format(d_key, ':' + d_key))
-        attr_values[':' + d_key] = d_valueZ
+        attr_values[':' + d_key] = d_value
 
     up_expression = "SET" + ", ".join(up_expression)
 
