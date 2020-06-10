@@ -60,19 +60,28 @@ def create_update_process(process_id, user_id):
 
     key = {'user_id': user_id}
 
-    # --------------- Code for created_at validation ------------------------
-    projection_expression = "processes.#process_id.#created_at"
-    attr_names = {'#process_id': process_id, "#created_at": "created_at"}
+    # --------------- Code for created_at validation and tier ------------------------
+    projection_expression = "processes.#process_id.#created_at, processes.#process_id.#tier"
+    attr_names = {'#process_id': process_id, "#created_at": "created_at", "#tier": "tier"}
 
     date_iso = datetime.now().isoformat()
     try:
         process = get_item(Dynamo.table, key, projection_expression, attr_names)
         scrapped['created_at'] = process.get("processes").get(process_id).get('created_at')
+        scrapped['tier'] = process.get("processes").get(process_id).get('tier')
     except:
         scrapped['created_at'] = date_iso
+        scrapped['tier'] = "1"
     # ------------------------------------------------------------------------
-    print(scrapped['created_at'])
+
     scrapped['updated_at'] = date_iso
+
+    data = request.get_json()
+
+    if data and isinstance(data, dict):
+        tier = data.get("tier")
+        if tier:
+            scrapped['tier'] = tier
 
     up_expression = "SET processes.#process_id = :scr"
     attr_names = {'#process_id': process_id}

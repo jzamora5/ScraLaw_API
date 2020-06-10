@@ -55,6 +55,14 @@ def create_user(user_id):
         'updated_at': date_iso,
         'processes': {}
     }
+
+    data = request.get_json()
+
+    if data and isinstance(data, dict):
+        for key, value in data.items():
+            if key in allowed_keys:
+                item[key] = value
+
     response = put_item(Dynamo.table, item)
 
     if not response:
