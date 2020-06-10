@@ -1,6 +1,6 @@
 """ Processes Endpoints"""
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import Dynamo
 from Dynamo import jsonify
 from Dynamo.CRUD import put_item, get_item, update_item, delete_item
@@ -102,7 +102,26 @@ def create_update_process(process_id, user_id):
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def delete_process(process_id, user_id):
     """ Deletes a process from a User in DynamoDB """
+
     key = {'user_id': user_id}
+    date_iso = datetime.now().isoformat()
+
+    # --------------- Code for tier validation ------------------------
+    projection_expression = "processes.#process_id.#created_at, processes.#process_id.#updated_at"
+    attr_names = {'#process_id': process_id, "#created_at": "created_at", "#updated_at": "updated_at"}
+
+    try:
+        process = get_item(Dynamo.table, key, projection_expression, attr_names)
+        created_at = process.get("processes").get(process_id).get('created_at')
+        updated_at = process.get("processes").get(process_id).get('updated_at')
+
+    except:
+        abort(400, description="Failed Getting process in User for Deletion")
+
+    # -----------------------------------------------------------------
+
+    created_obj = datetime.strptime(updated_at, '%Y-%m-%dT%H:%M:%S.%f').date()
+    updated_obj = datetime.strptime(updated_at, '%Y-%m-%dT%H:%M:%S.%f').date()
 
     up_expression = 'REMOVE processes.#process_id'
     attr_names = {'#process_id': process_id}
