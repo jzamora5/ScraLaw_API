@@ -25,7 +25,7 @@ app.config.update({
 app.register_blueprint(app_endpoints)
 
 CognitoAuth(app)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app)
 
 
 @app.errorhandler(404)

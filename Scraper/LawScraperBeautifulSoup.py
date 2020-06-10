@@ -77,8 +77,11 @@ def scrap_law(process_id):
         parties = {}
         for tr in table_rows:
             td = tr.find_all('td')
-            for i in td:
-                parties[td[0].text] = td[2].text
+            if td:
+                if parties.get(td[0].text, None) is None:
+                    parties[td[0].text] = []
+                if parties.get(td[0].text, None) is not None:
+                    parties[td[0].text].append(td[2].text)
 
     except Exception as e:
         print("Error parseando la data de las partes: ", e)
