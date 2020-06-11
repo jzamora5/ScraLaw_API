@@ -56,7 +56,7 @@ def create_update_process(process_id, user_id):
     # scrapped = {"Hello": "World", "Betty": "Holberton"}
 
     if not scrapped:
-        abort(400, description="Scrapper Failed")
+        abort(503, description="Scrapper Failed")
 
     key = {'user_id': user_id}
 
