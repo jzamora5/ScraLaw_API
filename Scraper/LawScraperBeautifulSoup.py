@@ -66,6 +66,7 @@ def scrap_law(process_id):
         num_proc = s.find('span', attrs={'class': 'serial'}).text
         radicate_at = s.find('div', attrs={'id': 'FechaProceso'}).text.strip()
         TipoProceso = s.find('div', attrs={'id': 'TipoProceso'}).text.strip()
+        Ubicacion_expediente = s.find('div', attrs={'id': 'Ubicacion'}).text.strip()
     except Exception as e:
         print("Error parseando la data general: ", e)
     try:
@@ -137,7 +138,8 @@ def scrap_law(process_id):
                 'city': county
             },
             'movements': dic_actua,
-            'location': county
+            'location': county,
+            'location_expediente': Ubicacion_expediente
         }
     except Exception as e:
         print("Error Unificando la data en el dictionary: ", e)
