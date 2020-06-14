@@ -10,7 +10,8 @@ For this API to work, several settings must be defined. This includes:
 
 - Valid AWS Cognito UserPool ID and APP Client ID.
 - Valid region for the AWS Dynamo Data Base.
-- Valid NGINX configuration files that define correct Timeout times  for requests and responses (by default this is increased from 60 to 180 seconds).
+- Valid NGINX configuration files that define correct Timeout times  for requests and responses (.platform/nginx  folder).
+- Valid timezone configuration (.ebextensions folder)
 
 # Access 
 
@@ -111,11 +112,20 @@ The process id is given by the user at the moment of creating a new process, and
 	type_proc: Type of process (String)
 	parties: Parties in the process (Object with values as List)
 	office: (Object) Contains:   
+<<<<<<< HEAD
     --------name: Name of office  
 	--------judge:  Name of the judge
 	--------city: location of the office  
 	movements: Contains information regarding the different movements of the legal process (Object)  
 	location: location of the process
+=======
+            name: Name of office (String)
+	        judge:  Name of the judge (String)
+	        city: location of the office (String)
+	movements: Contains information regarding the different movements of the legal process (Array of Objects)  
+	location: location of the process (String)
+	location_expediente: location of physical document in the office
+>>>>>>> dbd4aef... Update README
   
 **The processes endpoints are presented next:**
 
