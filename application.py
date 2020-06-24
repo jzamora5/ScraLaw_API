@@ -1,6 +1,7 @@
 """ Flask Application """
 import sys
 
+# Adds the AWS Folder (ElasticBeanstalk) to the PythonPath so that modules are recognized
 sys.path.append('/var/app/current')
 
 from flask import Flask, make_response, jsonify
@@ -10,6 +11,7 @@ from flask_cognito import CognitoAuth
 
 app = Flask(__name__)
 
+# Adds all AWS Cognito configurations into the flask config
 app.config.update({
     'COGNITO_REGION': 'us-east-1',
     'COGNITO_USERPOOL_ID': 'us-east-1_sgeT5tm5u',
@@ -21,10 +23,11 @@ app.config.update({
     'COGNITO_JWT_HEADER_PREFIX': 'Bearer'
 })
 
-
+# Registers the blueprint into the flask application
 app.register_blueprint(app_endpoints)
-
+# Registers the flask application into the authentication library
 CognitoAuth(app)
+# Establishes cors configuration for the flask application
 CORS(app)
 
 
@@ -40,4 +43,5 @@ def not_found(error):
 
 
 if __name__ == '__main__':
+    """ In case the Flask application is run as a main program """
     app.run()

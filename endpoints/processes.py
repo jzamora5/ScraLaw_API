@@ -16,9 +16,9 @@ from Scraper.LawScraperBeautifulSoup import scrap_law
 def get_process(process_id, user_id):
     """ Returns all the info from a user in DynamoDB"""
 
-    key = {'user_id': user_id}
-    projection_expression = "processes.#process_id"
-    attr_names = {'#process_id': process_id}
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
+    projection_expression = "processes.#process_id"  # Defines an expression to get item
+    attr_names = {'#process_id': process_id}  # Defines some attr to replace in projection expression
 
     response = get_item(Dynamo.table, key,  projection_expression, attr_names)
     if not response:
@@ -37,8 +37,8 @@ def get_process(process_id, user_id):
 def get_processes(user_id):
     """ Returns all the info from a user in DynamoDB"""
 
-    key = {'user_id': user_id}
-    projection_expression = "processes"
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
+    projection_expression = "processes"  # Gets everything in processes
 
     response = get_item(Dynamo.table, key, projection_expression)
     if not response:
@@ -52,19 +52,22 @@ def get_processes(user_id):
 def create_update_process(process_id, user_id):
     """ Creates or Updates a Process in a specific User in DynamoDB Table"""
 
-    scrapped = scrap_law(process_id)
+    scrapped = scrap_law(process_id)  # Calls web scrapper with the Process ID
     # scrapped = {"Hello": "World", "Betty": "Holberton"}
 
     if not scrapped:
+        # If scrapper failed then it was probably because the web page to scrap had issues
         abort(503, description="Scrapper Failed")
 
-    key = {'user_id': user_id}
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
 
     # --------------- Code for created_at validation and tier ------------------------
+    # This code checks if the process exists already and if it does, obtains its creation date
+    # and also a tier value that will be used in the future for monetization purposes
     projection_expression = "processes.#process_id.#created_at, processes.#process_id.#tier"
     attr_names = {'#process_id': process_id, "#created_at": "created_at", "#tier": "tier"}
 
-    date_iso = datetime.now().isoformat()
+    date_iso = datetime.now().isoformat()  # Obtains current date in iso format
     try:
         process = get_item(Dynamo.table, key, projection_expression, attr_names)
         scrapped['created_at'] = process.get("processes").get(process_id).get('created_at')
@@ -74,10 +77,12 @@ def create_update_process(process_id, user_id):
         scrapped['tier'] = "1"
     # ------------------------------------------------------------------------
 
-    scrapped['updated_at'] = date_iso
+    scrapped['updated_at'] = date_iso  # Updates the updated at date
 
+    # Tries to obtain body from request as json
     data = request.get_json()
 
+    # If body exists and is a valid dictionary after conversion then it will be used as an update set of attr
     if data and isinstance(data, dict):
         tier = data.get("tier")
         if tier:
@@ -103,10 +108,12 @@ def create_update_process(process_id, user_id):
 def delete_process(process_id, user_id):
     """ Deletes a process from a User in DynamoDB """
 
-    key = {'user_id': user_id}
-    date_iso = datetime.now().isoformat()
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
+    date_iso = datetime.now().isoformat()  # Obtains current date in iso format
 
     # --------------- Code for tier validation ------------------------
+    # Code to be used in the future, as of right now it has no real purpose besides validating
+    # if a process already exists
     projection_expression = "processes.#process_id.#created_at, processes.#process_id.#updated_at"
     attr_names = {'#process_id': process_id, "#created_at": "created_at", "#updated_at": "updated_at"}
 
@@ -123,6 +130,7 @@ def delete_process(process_id, user_id):
     created_obj = datetime.strptime(updated_at, '%Y-%m-%dT%H:%M:%S.%f').date()
     updated_obj = datetime.strptime(updated_at, '%Y-%m-%dT%H:%M:%S.%f').date()
 
+    # Defines the expressions to be used with Dynamo to remove a specific process
     up_expression = 'REMOVE processes.#process_id'
     attr_names = {'#process_id': process_id}
     attr_values = {}

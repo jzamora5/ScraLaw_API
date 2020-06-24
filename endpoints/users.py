@@ -9,7 +9,7 @@ from flask import abort, make_response, request
 from flask_cognito import cognito_auth_required
 from os import getenv
 
-
+# Defines some keys that are allowed on creation or update of a user
 allowed_keys = ['tier', 'first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'cel']
 
 
@@ -17,6 +17,8 @@ allowed_keys = ['tier', 'first_name', 'last_name', 'person_id_type', 'person_id'
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def get_users():
     """ Returns all the users from DynamoDB table"""
+
+    # Performs a scan operation to basically obtain all data from a table
     response = Dynamo.table.scan()
     items = response['Items']
     return jsonify(items)
@@ -27,6 +29,7 @@ def get_users():
 def get_user(user_id):
     """ Returns all the info from a user in DynamoDB"""
 
+    # Gets a specific user by defining a hash key
     key = {'user_id': user_id}
     response = get_item(Dynamo.table, key)
     if not response:
@@ -40,8 +43,9 @@ def get_user(user_id):
 def create_user(user_id):
     """ Creates a new User in DynamoDB Table"""
     date_now = datetime.now()
-    date_iso = date_now.isoformat()
+    date_iso = date_now.isoformat()  # Gets current date in iso format
 
+    # Defines some base attributes that any new user will have
     item = {
         'user_id': user_id,
         'tier': '1',
@@ -56,8 +60,10 @@ def create_user(user_id):
         'processes': {}
     }
 
+    # Tries to obtain body from request
     data = request.get_json()
 
+    # If body exists and is a valid dict after converting, then it is used as a set of creation attributes
     if data and isinstance(data, dict):
         for key, value in data.items():
             if key in allowed_keys:
@@ -76,16 +82,18 @@ def create_user(user_id):
 def update_user(user_id):
     """ Updates a user's information """
 
+    # If there is not a valid json body in the request, then update is not possible
     if request.get_json() is None:
         abort(400, description="Not a JSON")
 
     data = request.get_json()
 
-    key = {'user_id': user_id}
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
 
     up_expression = []
     attr_values = {}
 
+    # Builds a data structure of attributes to be updated wil a valid Dynamo Expression
     for d_key, d_value in data.items():
         if d_key not in allowed_keys:
             continue
@@ -96,6 +104,8 @@ def update_user(user_id):
 
     response = ""
 
+    # If there is at least 1 valid attribute in the request body, then an updated at date is added to the
+    # update expression, and the update_item function is called
     if attr_values:
         up_expression += ', updated_at=:updated_at'
         date_iso = datetime.now().isoformat()
@@ -112,7 +122,7 @@ def update_user(user_id):
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def delete_user(user_id):
     """ Deletes a user from DynamoDB """
-    key = {'user_id': user_id}
+    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
 
     response = delete_item(Dynamo.table, key)
 

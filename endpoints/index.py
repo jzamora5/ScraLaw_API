@@ -18,7 +18,10 @@ def status():
 @app_endpoints.route('/test', methods=['GET'], strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def test():
-    """ Test Endpoint """
+    """
+    Test Endpoint
+    At the moment it simple tests dates operations
+    """
 
     date_iso = datetime.now().isoformat()
 
@@ -36,7 +39,11 @@ def test():
 @app_endpoints.route('/testp', methods=['GET'], strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def testp():
-    """ Test Endpoint """
+    """
+    Test Endpoint
+    At the moment it performs a web scrape with a specific process id
+    """
+
     process_id = '11001221500020160010300'
     scrapped = scrap_law(process_id)
     try:
