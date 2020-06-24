@@ -111,14 +111,7 @@ The process id is given by the user at the moment of creating a new process, and
     radicated_at: Date of process radication (String)  
 	type_proc: Type of process (String)
 	parties: Parties in the process (Object with values as List)
-	office: (Object) Contains:   
-<<<<<<< HEAD
-    --------name: Name of office  
-	--------judge:  Name of the judge
-	--------city: location of the office  
-	movements: Contains information regarding the different movements of the legal process (Object)  
-	location: location of the process
-=======
+	office: (Object) Contains:
             name: Name of office (String)
 	        judge:  Name of the judge (String)
 	        city: location of the office (String)
