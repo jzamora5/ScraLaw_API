@@ -168,6 +168,23 @@ The API uses the boto3 library in order to perform integration with the AWS Dyna
 All the CRUD functions for the database can be found in the Dynamo Folder, including operations with items in a table, and also tables themselves.
 
 
+# Project Front-End
+
+
+This is the Repo for the front-end build with ReactJS
+
+[Click me](https://github.com/cbayonao/Frontend_Proyecto_final_HBS)  
+
+
+
+# Project Deployed
+
+This is the deployed project with AWS
+
+
+[Click me](https://procesosweb.consulting/)  
+
+
 # Authors
 
 Jhoan Zamora [jzamora5](https://github.com/jzamora5)  
