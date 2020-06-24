@@ -118,7 +118,7 @@ The process id is given by the user at the moment of creating a new process, and
 	movements: Contains information regarding the different movements of the legal process (Array of Objects)  
 	location: location of the process (String)
 	location_expediente: location of physical document in the office
->>>>>>> dbd4aef... Update README
+
   
 **The processes endpoints are presented next:**
 
