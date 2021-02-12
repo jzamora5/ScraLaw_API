@@ -162,6 +162,16 @@ This is the deployed project with AWS
 
 [Click me](https://procesosweb.consulting/)
 
+# Challenges and Future Features
+
+This was a really challenging project to develop because of the implementation of AWS services and the steep learning curve in some of them.
+
+Still, the development was really enriching, and the knowledge obtained was definitely worth it.
+
+In the future it would be interesting to migrate the web scraper to a more specialized tool such as Scrapy by itself or in conjunction with Selenium.
+
+It would also be interesting to evaluate serverless alternatives to run the API.
+
 # Authors
 
 Jhoan Zamora [jzamora5](https://github.com/jzamora5)  
