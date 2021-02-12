@@ -185,3 +185,7 @@ Camilo Bayona [cbayonao](https://github.com/cbayonao)
 🎯 I have experience developing both back end and front end. I have used technologies such as Bootstrap, SASS, React, Flask, Django, Express, SQL, MongoDB, AWS, among others.
 
 🎯 I also studied Sound Engineering some years ago, and I love music, videogames, and audiovisual media.
+
+🔹 [LinkedIn](https://www.linkedin.com/in/jhoan-stiven-zamora-caicedo/)
+
+🔹 [Twitter](https://twitter.com/JhoanZamora10)
