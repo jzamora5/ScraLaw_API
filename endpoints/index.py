@@ -29,10 +29,7 @@ def test():
     date_obj = datetime.strptime(date_iso, '%Y-%m-%dT%H:%M:%S.%f').date()
     date_sub = date_obj - timedelta(days=1)
 
-    print(date_obj)
-    print(date_sub)
     sub = (date_obj - date_sub).days
-    print(type(sub))
 
     return jsonify({})
 
