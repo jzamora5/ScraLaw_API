@@ -3,13 +3,15 @@ from bs4 import BeautifulSoup
 import json
 import time
 
+URL = 'https://consultaprocesos.ramajudicial.gov.co/Procesos/NumeroRadicacion'
+
 
 def scrap_law(process_id):
     """
     Method to scrape legal cases in Colombia
     """
     try:
-        url = 'https://consultaprocesos.ramajudicial.gov.co/Procesos/NumeroRadicacion'
+        url = URL
         """
         First get request
         """
@@ -22,7 +24,8 @@ def scrap_law(process_id):
         print("Error en el primer request:", e)
     try:
         """Parse first form to send in second post request"""
-        formulario = s.find('form', attrs={'class':'consulta'}).find_all('input')
+        formulario = s.find(
+            'form', attrs={'class': 'consulta'}).find_all('input')
         if formulario:
             form = {
                 formulario[0].get('name'): formulario[0].get('value'),
@@ -42,8 +45,10 @@ def scrap_law(process_id):
         s = BeautifulSoup(r.text, 'lxml')
         headers = r.headers
         """Parse Second Form"""
-        formulario = s.find('form', attrs={'class':'consulta'}).find_all('input')
-        id_proc = s.find('a', attrs={'onclick':'PostIdProceso(event)'}).get('id')
+        formulario = s.find(
+            'form', attrs={'class': 'consulta'}).find_all('input')
+        id_proc = s.find(
+            'a', attrs={'onclick': 'PostIdProceso(event)'}).get('id')
 
         form['IdProceso'] = id_proc
 
@@ -66,7 +71,8 @@ def scrap_law(process_id):
         num_proc = s.find('span', attrs={'class': 'serial'}).text
         radicate_at = s.find('div', attrs={'id': 'FechaProceso'}).text.strip()
         TipoProceso = s.find('div', attrs={'id': 'TipoProceso'}).text.strip()
-        Ubicacion_expediente = s.find('div', attrs={'id': 'Ubicacion'}).text.strip()
+        Ubicacion_expediente = s.find(
+            'div', attrs={'id': 'Ubicacion'}).text.strip()
     except Exception as e:
         print("Error parseando la data general: ", e)
     try:
@@ -145,4 +151,3 @@ def scrap_law(process_id):
         print("Error Unificando la data en el dictionary: ", e)
 
     return data
-

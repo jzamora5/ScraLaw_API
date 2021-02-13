@@ -10,7 +10,8 @@ from flask_cognito import cognito_auth_required
 from os import getenv
 
 # Defines some keys that are allowed on creation or update of a user
-allowed_keys = ['tier', 'first_name', 'last_name', 'person_id_type', 'person_id', 'e_mail', 'cel']
+allowed_keys = ['tier', 'first_name', 'last_name',
+                'person_id_type', 'person_id', 'e_mail', 'cel']
 
 
 @app_endpoints.route('/users/', methods=['GET'], strict_slashes=False)
@@ -38,7 +39,8 @@ def get_user(user_id):
     return jsonify(response)
 
 
-@app_endpoints.route('/users/<user_id>', methods=['POST'], strict_slashes=False)
+@app_endpoints.route('/users/<user_id>', methods=['POST'],
+                     strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def create_user(user_id):
     """ Creates a new User in DynamoDB Table"""
@@ -63,7 +65,8 @@ def create_user(user_id):
     # Tries to obtain body from request
     data = request.get_json()
 
-    # If body exists and is a valid dict after converting, then it is used as a set of creation attributes
+    # If body exists and is a valid dict after converting, then it is
+    # used as a set of creation attributes
     if data and isinstance(data, dict):
         for key, value in data.items():
             if key in allowed_keys:
@@ -77,23 +80,27 @@ def create_user(user_id):
     return make_response(jsonify(response), 201)
 
 
-@app_endpoints.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_endpoints.route('/users/<user_id>', methods=['PUT'],
+                     strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def update_user(user_id):
     """ Updates a user's information """
 
-    # If there is not a valid json body in the request, then update is not possible
+    # If there is not a valid json body in the request,
+    # then update is not possible
     if request.get_json() is None:
         abort(400, description="Not a JSON")
 
     data = request.get_json()
 
-    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
+    # Defines which key will be used as hash to retrieve item
+    key = {'user_id': user_id}
 
     up_expression = []
     attr_values = {}
 
-    # Builds a data structure of attributes to be updated wil a valid Dynamo Expression
+    # Builds a data structure of attributes to be updated
+    # with a valid Dynamo Expression
     for d_key, d_value in data.items():
         if d_key not in allowed_keys:
             continue
@@ -104,7 +111,8 @@ def update_user(user_id):
 
     response = ""
 
-    # If there is at least 1 valid attribute in the request body, then an updated at date is added to the
+    # If there is at least 1 valid attribute in the request body,
+    # then an updated at date is added to the
     # update expression, and the update_item function is called
     if attr_values:
         up_expression += ', updated_at=:updated_at'
@@ -118,11 +126,13 @@ def update_user(user_id):
     return jsonify(response)
 
 
-@app_endpoints.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
+@app_endpoints.route('/users/<user_id>', methods=['DELETE'],
+                     strict_slashes=False)
 @decorate_if_not(getenv('LOCAL'), cognito_auth_required)
 def delete_user(user_id):
     """ Deletes a user from DynamoDB """
-    key = {'user_id': user_id}  # Defines which key will be used as hash to retrieve item
+    key = {'user_id': user_id}
+    # Defines which key will be used as hash to retrieve item
 
     response = delete_item(Dynamo.table, key)
 

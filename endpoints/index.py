@@ -9,6 +9,7 @@ from os import getenv
 from Scraper.LawScraperBeautifulSoup import scrap_law
 from flask import abort
 
+
 @app_endpoints.route('/status', methods=['GET'], strict_slashes=False)
 def status():
     """ Status of API """

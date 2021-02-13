@@ -1,13 +1,14 @@
 """ Flask Application """
+from flask_cognito import CognitoAuth
+from endpoints import app_endpoints
+from flask_cors import CORS
+from flask import Flask, make_response, jsonify
 import sys
 
-# Adds the AWS Folder (ElasticBeanstalk) to the PythonPath so that modules are recognized
+# Adds the AWS Folder (ElasticBeanstalk) to the PythonPath
+# so that modules are recognized
 sys.path.append('/var/app/current')
 
-from flask import Flask, make_response, jsonify
-from flask_cors import CORS
-from endpoints import app_endpoints
-from flask_cognito import CognitoAuth
 
 app = Flask(__name__)
 
@@ -17,8 +18,10 @@ app.config.update({
     'COGNITO_USERPOOL_ID': 'us-east-1_sgeT5tm5u',
 
     # optional
-    'COGNITO_APP_CLIENT_ID': '3rj5a30prom7dudokc1b5dog4l',  # client ID you wish to verify user is authenticated against
-    'COGNITO_CHECK_TOKEN_EXPIRATION': True,  # disable token expiration checking for testing purposes
+    # client ID you wish to verify user is authenticated against
+    'COGNITO_APP_CLIENT_ID': '3rj5a30prom7dudokc1b5dog4l',
+    # disable token expiration checking for testing purposes
+    'COGNITO_CHECK_TOKEN_EXPIRATION': True,
     'COGNITO_JWT_HEADER_NAME': 'X-MyApp-Authorization',
     'COGNITO_JWT_HEADER_PREFIX': 'Bearer'
 })

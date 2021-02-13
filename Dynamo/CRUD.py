@@ -25,18 +25,21 @@ def get_item(table, key, projection_expression=[], attr_names=[]):
     parameters = {"Key": key}
 
     if projection_expression:
-        # This expression identifies one or more attributes to retrieve from the table
+        # This expression identifies one or more attributes to
+        # retrieve from the table
         parameters["ProjectionExpression"] = projection_expression
 
     if attr_names:
-        # One or more substitution tokens for attribute names in an expression
+        # One or more substitution tokens for attribute names in
+        # an expression
         parameters["ExpressionAttributeNames"] = attr_names
 
     try:
         response = table.get_item(**parameters)
 
     except ClientError as e:
-        # If there is an error give a response with the error message
+        # If there is an error give a response with the error
+        # message
         print(e.response['Error']['Message'])
         return False
     else:
@@ -49,9 +52,12 @@ def update_item(table, key, up_expression, attr_values, attr_names={}):
     # UpdateExpression= "set info.rating = :r, info.plot=:p, info.actors=:a"
 
     try:
-        # Includes some necessary parameters for updating items in a Dynamo Table
-        # UpdateExpression: An expression that defines one or more attributes to be updated
-        # Return Value: UPDATED NEW defines a response telling which attributes where updated
+        # Includes some necessary parameters for updating items in a
+        # Dynamo Table
+        # UpdateExpression: An expression that defines one or more attributes
+        # to be updated
+        # Return Value: UPDATED NEW defines a response telling which attributes
+        # where updated
         # Condition Expression defines an update only if a user id exists
         parameters = {
             "Key": key,
@@ -61,7 +67,8 @@ def update_item(table, key, up_expression, attr_values, attr_names={}):
         }
 
         if attr_names:
-            # One or more substitution tokens for attribute names in an expression
+            # One or more substitution tokens for attribute
+            # names in an expression
             parameters["ExpressionAttributeNames"] = attr_names
         if attr_values:
             # One or more values that can be substituted in an expression
