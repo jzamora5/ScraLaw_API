@@ -9,7 +9,7 @@ docutils==0.15.2
 ecdsa==0.15
 Flask==1.1.2
 Flask-Cognito==1.14
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.2
